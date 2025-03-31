@@ -8,7 +8,7 @@ class CalculatorPage extends StatefulWidget {
   const CalculatorPage({super.key});
 
   @override
-  _CalculatorPageState  createState() => _CalculatorPageState();
+  _CalculatorPageState createState() => _CalculatorPageState();
 }
 
 class _CalculatorPageState extends State<CalculatorPage> {
@@ -16,8 +16,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   int currentState = 1;
   String? mathOperator;
 
-  double firstNumber = 0,
-      secondNumber = 0;
+  double firstNumber = 0, secondNumber = 0;
   String resultText = "0";
 
   void onSelectNumber(String number) {
@@ -43,7 +42,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
       setState(() {
         secondNumber = double.parse(resultText);
         double result = Calculator.calculate(
-            firstNumber, secondNumber, mathOperator!);
+          firstNumber,
+          secondNumber,
+          mathOperator!,
+        );
         resultText = result.toTrimmedString();
         mathOperator = null;
         firstNumber = result;
@@ -66,13 +68,18 @@ class _CalculatorPageState extends State<CalculatorPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Display(resultText: resultText),
+          Display(
+            resultText: resultText,
+            previousEntry: firstNumber != 0 ? firstNumber.toString() : null,
+            operator: mathOperator,
+          ),
           const SizedBox(height: 10),
           buildButtonRows(),
         ],
       ),
     );
   }
+
   Widget buildButtonRows() {
     return Column(
       children: [
@@ -84,25 +91,27 @@ class _CalculatorPageState extends State<CalculatorPage> {
       ],
     );
   }
+
   Widget buildButtonRow(List<String> values) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: values.map((value) {
-        return CalcButton(
-          label: value,
-          onTap: () {
-            if (value == "C") {
-              onClear();
-            } else if (value == "=") {
-              onCalculate();
-            } else if (["÷", "×", "-", "+"].contains(value)) {
-              onSelectOperator(value);
-            } else {
-              onSelectNumber(value);
-            }
-          },
-        );
-      }).toList(),
+      children:
+          values.map((value) {
+            return CalcButton(
+              label: value,
+              onTap: () {
+                if (value == "C") {
+                  onClear();
+                } else if (value == "=") {
+                  onCalculate();
+                } else if (["÷", "×", "-", "+"].contains(value)) {
+                  onSelectOperator(value);
+                } else {
+                  onSelectNumber(value);
+                }
+              },
+            );
+          }).toList(),
     );
   }
 }
