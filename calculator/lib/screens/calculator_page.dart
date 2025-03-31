@@ -31,7 +31,18 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   void onSelectOperator(String operator) {
     setState(() {
-      firstNumber = double.parse(resultText);
+      if (mathOperator != null) {
+        secondNumber = double.parse(resultText);
+        double result = Calculator.calculate(
+          firstNumber,
+          secondNumber,
+          mathOperator!,
+        );
+        firstNumber = result;
+        resultText = result.toTrimmedString();
+      } else {
+        firstNumber = double.parse(resultText);
+      }
       mathOperator = operator;
       resultText = "0";
     });
@@ -59,6 +70,23 @@ class _CalculatorPageState extends State<CalculatorPage> {
       firstNumber = 0;
       secondNumber = 0;
       mathOperator = null;
+    });
+  }
+
+  void onToggleSign() {
+    setState(() {
+      if (resultText.startsWith('-')) {
+        resultText = resultText.substring(1);
+      } else {
+        resultText = '-$resultText';
+      }
+    });
+  }
+
+  void onPercentage() {
+    setState(() {
+      double value = double.parse(resultText);
+      resultText = (value / 100).toTrimmedString();
     });
   }
 
@@ -104,6 +132,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   onClear();
                 } else if (value == "=") {
                   onCalculate();
+                } else if (value == "%") {
+                  onPercentage();
+                } else if (value == "+/-") {
+                  onToggleSign();
                 } else if (["÷", "×", "-", "+"].contains(value)) {
                   onSelectOperator(value);
                 } else {
