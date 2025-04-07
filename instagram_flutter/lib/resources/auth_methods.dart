@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:typed_data';
 
+import 'package:instagram_flutter/resources/storage_methods.dart';
+
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -13,48 +15,43 @@ class AuthMethods {
     required String email,
     required String password,
     required String username,
-    required String bio,
-    required Uint8List file,
+    Uint8List? file,
   }) async {
     String res = "Some error occurred";
     try {
-      if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty && bio.isNotEmpty && file != null) {
-        // Create user
+      if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty) {
+        print("Creating user with email: $email");
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
+        print("User created with UID: ${cred.user!.uid}");
 
-        // Upload profile picture to Firebase Storage
-        String photoUrl = await _uploadImageToStorage('profilePics', file, false);
+        String? photoUrl;
+        if (file != null) {
+          try {
+            photoUrl = await StorageMethods().uploadImagetoStorage('profilePicture', file, false);
+          } catch (err) {
+            print("Image upload failed: $err");
+            res = "Image upload failed";
+          }
+        }
 
-        // Add user to Firestore
         await _firestore.collection('users').doc(cred.user!.uid).set({
           'username': username,
           'uid': cred.user!.uid,
           'email': email,
-          'bio': bio,
-          'photoUrl': photoUrl,
           'followers': [],
           'following': [],
+          'photoUrl': photoUrl,
         });
 
         res = "success";
-      } else {
-        res = "Please fill all the fields";
       }
     } catch (err) {
+      print("Error occurred: $err");
       res = err.toString();
     }
     return res;
-  }
-
-  Future<String> _uploadImageToStorage(String childName, Uint8List file, bool isPost) async {
-    Reference ref = _storage.ref().child(childName).child(_auth.currentUser!.uid);
-
-    UploadTask uploadTask = ref.putData(file);
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-    return downloadUrl;
   }
 }
