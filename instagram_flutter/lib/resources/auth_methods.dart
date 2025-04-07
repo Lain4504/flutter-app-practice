@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -30,7 +32,11 @@ class AuthMethods {
         String? photoUrl;
         if (file != null) {
           try {
-            photoUrl = await StorageMethods().uploadImagetoStorage('profilePicture', file, false);
+            photoUrl = await StorageMethods().uploadImagetoStorage(
+              'profilePicture',
+              file,
+              false,
+            );
           } catch (err) {
             print("Image upload failed: $err");
             res = "Image upload failed";
@@ -50,6 +56,29 @@ class AuthMethods {
       }
     } catch (err) {
       print("Error occurred: $err");
+      res = err.toString();
+    }
+    return res;
+  }
+
+  // Logging in user
+  Future<String> loginUser({
+    required String email,
+    required String password,
+  }) async {
+    String res = "Some error occurred";
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        // Logging in user
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        res = "success";
+      } else {
+        res = "Please enter all the fields";
+      }
+    } catch (err) {
       res = err.toString();
     }
     return res;

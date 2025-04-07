@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/screen/login_screen.dart';
 import 'package:instagram_flutter/screen/signup_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: SignupScreen(),
+      home: LoginScreen(),
 
     );
   }
