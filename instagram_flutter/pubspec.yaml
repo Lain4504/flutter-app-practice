@@ -29,3 +29,6 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 flutter:
   uses-material-design: true
+  assets:
+    - assets/ic_instagram.svg
+    - assets/avatar_holder.jpg
