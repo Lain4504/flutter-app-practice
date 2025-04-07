@@ -53,7 +53,11 @@ class AuthMethods {
         });
 
         res = "success";
+      } else {
+        res = "Please fill in all the fields";
       }
+    } on FirebaseAuthException catch (e) {
+      res = e.message ?? "An error occurred";
     } catch (err) {
       print("Error occurred: $err");
       res = err.toString();
@@ -68,7 +72,7 @@ class AuthMethods {
   }) async {
     String res = "Some error occurred";
     try {
-      if (email.isNotEmpty || password.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty) {
         // Logging in user
         await _auth.signInWithEmailAndPassword(
           email: email,
@@ -77,6 +81,14 @@ class AuthMethods {
         res = "success";
       } else {
         res = "Please enter all the fields";
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        res = "No user found for that email.";
+      } else if (e.code == 'wrong-password') {
+        res = "Wrong password provided for that user.";
+      } else {
+        res = e.message ?? "An error occurred";
       }
     } catch (err) {
       res = err.toString();
