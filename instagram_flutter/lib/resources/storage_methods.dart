@@ -7,7 +7,7 @@ class StorageMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // adding image to firebase storage
-  Future<String> uploadImagetoStorage(
+  Future<String> uploadImageToStorage(
     String childName,
     Uint8List file,
     bool isPost,
