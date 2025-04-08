@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/calculator/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/calculator/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/calculator/build" />
+      <excludeFolder url="file://$MODULE_DIR$/instagram_flutter/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/instagram_flutter/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/instagram_flutter/build" />
+      <excludeFolder url="file://$MODULE_DIR$/namer_app/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/namer_app/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/namer_app/build" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
